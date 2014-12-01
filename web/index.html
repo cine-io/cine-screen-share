@@ -160,6 +160,7 @@
       }
 
       function installChromeExtension(event) {
+        event.preventDefault()
         chrome.webstore.install()
       }
 
