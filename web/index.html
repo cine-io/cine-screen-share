@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="description" content="" />
+
+    <title>Desktop Streaming</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Play:400,700|Oswald:300|Raleway:100,300" media="screen" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="https://www.cine.io/images/cine-icon.png" />
+
+    <style type="text/css">
+    input {
+      width: 100%;
+    }
+
+    button {
+      margin-top: 1em;
+    }
+
+    #publisher > h3 {
+      text-align: center;
+    }
+
+    #status {
+      color: blue;
+      margin-bottom: 1em;
+    }
+    #publisher{
+      outline: 1px dotted red;
+    }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="row preview">
+        <div id="name" class="col-md-12">
+          <h2 class="">Desktop Streaming</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="status" class="col-md-12"></div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-4">
+          <p>If you've got the right chrome extension installed, you'll see a
+          video on the right showing your streaming desktop.</p>
+
+          <form>
+            <div class="control-group">
+              <div class="controls">
+                <button  class="col-md-3 btn btn-success start-btn">Start</button>
+                <!-- <button class="col-md-3 col-md-offset-1 btn btn-danger cancel-btn">Cancel</button> -->
+                <button class="col-md-3 col-md-offset-1 btn btn-danger stop-btn">Stop</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-md-7 col-md-offset-1">
+          <div id="desktop">
+            <video id="video" autoplay></video>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    $(function() {
+
+      var localStream = null
+
+      function onStreamEnded() {
+        console.log("Stream ended.")
+      }
+
+      function onStreamReceived(stream) {
+        console.log("Received local stream:", stream)
+        $("#video").get(0).src = URL.createObjectURL(stream)
+        localStream = stream
+        stream.onended = onStreamEnded
+      }
+
+      function onGetUserMediaError() {
+        console.log("getUserMedia() failed.")
+      }
+
+      function onScreenShareResponse(id) {
+        if (!id) {
+          console.log("Access rejected.")
+          return;
+        }
+        navigator.webkitGetUserMedia({
+            audio:false,
+            video: {
+              mandatory: {
+                chromeMediaSource: "desktop",
+                chromeMediaSourceId: id
+              }
+            }
+        }, onStreamReceived, onGetUserMediaError)
+      }
+
+      function receiveMessage(event) {
+        switch (event.data.name) {
+        case "cineScreenHasExtension":
+          console.log("cine.io screen share extension loaded.")
+          break
+        case "cineScreenShareResponse":
+          onScreenShareResponse(event.data.id)
+          break
+        }
+      }
+
+      window.addEventListener("message", receiveMessage, false)
+
+      $('.start-btn').on('click', function(event) {
+        event.preventDefault()
+        console.log("requesting screen share ...")
+        window.postMessage({ name: "cineScreenShare" }, "*")
+      })
+
+      $('.stop-btn').on('click', function(event) {
+        event.preventDefault()
+        if (localStream != null) {
+          console.log("stopping screen share ...")
+          localStream.stop()
+        }
+      })
+
+    })
+
+    </script>
+
+  </body>
+</html>
