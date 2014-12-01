@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="https://www.cine.io/images/cine-icon.png" />
 
     <style type="text/css">
-    input {
+    input, video {
       width: 100%;
     }
 
@@ -96,8 +96,12 @@
         stream.onended = onStreamEnded
       }
 
-      function onGetUserMediaError() {
-        console.log("getUserMedia() failed.")
+      function onGetUserMediaError(err) {
+        var errStr =
+          "getUserMedia() failed: " +
+          (err.name ? err.name + (err.message ? " (" + err.message + ")" : "") : err)
+        console.log(errStr)
+        alert(errStr)
       }
 
       function onScreenShareResponse(id) {
@@ -127,21 +131,36 @@
         }
       }
 
-      window.addEventListener("message", receiveMessage, false)
-
-      $('.start-btn').on('click', function(event) {
+      function startScreenShare(event) {
         event.preventDefault()
-        console.log("requesting screen share ...")
-        window.postMessage({ name: "cineScreenShare" }, "*")
-      })
+        if (navigator.webkitGetUserMedia) {
+          console.log("requesting screen share ...")
+          window.postMessage({ name: "cineScreenShare" }, "*")
+        } else if (navigator.mozGetUserMedia) {
+          console.log("requesting screen share ...")
+          navigator.mozGetUserMedia({
+              audio:false,
+              video: {
+                mediaSource: "screen"
+              }
+          }, onStreamReceived, onGetUserMediaError)
+        } else {
+          alert("Screen sharing not yet supported in your browser.")
+          return false
+        }
+      }
 
-      $('.stop-btn').on('click', function(event) {
+      function stopScreenShare(event) {
         event.preventDefault()
         if (localStream != null) {
           console.log("stopping screen share ...")
           localStream.stop()
         }
-      })
+      }
+
+      window.addEventListener("message", receiveMessage, false) // Chrome only
+      $('.start-btn').on('click', startScreenShare)
+      $('.stop-btn').on('click', stopScreenShare)
 
     })
 
