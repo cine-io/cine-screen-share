@@ -35,6 +35,10 @@
     #publisher{
       outline: 1px dotted red;
     }
+
+    .configure-firefox {
+      font-size: 0.75em;
+    }
     </style>
   </head>
 
@@ -64,6 +68,13 @@
                 <button  class="col-md-3 btn btn-success start-btn">Start</button>
                 <button class="col-md-3 col-md-offset-1 btn btn-danger stop-btn">Stop</button><br/>
                 <button class="hidden col-md-7 btn btn-primary install-btn">Install Chrome Extension</button>
+                <div class="configure-firefox col-md-12">
+                  <p>To configure Firefox:</p>
+                  <ol>
+                    <li>Ensure that the <code>media.getusermedia.screensharing.enabled</code> setting is <code>true</code>.</li>
+                    <li>Append <code>cine.io,*.cine.io</code> to the <code>media.getusermedia.screensharing.allowed_domains</code> setting.</li>
+                  </ol>
+                </div>
               </div>
             </div>
           </form>
@@ -171,6 +182,8 @@
 
       if (navigator.webkitGetUserMedia) {
         $('.install-btn').removeClass('hidden')
+      } else if (navigator.mozGetUserMedia) {
+        $('.configure-firefox').removeClass('hidden')
       }
 
     })

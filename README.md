@@ -39,7 +39,7 @@ it work, you'll need to edit your advanced preferences:
 1. Open [about:config][firefox-config].
 2. In the search box, type `media.getusermedia`.
 3. Ensure that the `media.getusermedia.screensharing.enabled` setting is `true`.
-4. Append `cine.io,*.cine.io,localtest.me,*.localtest.me` to the `media.getusermedia.screensharing.allowed_domains` setting.
+4. Append `cine.io,*.cine.io` to the `media.getusermedia.screensharing.allowed_domains` setting.
 
 
 <!-- external links -->
