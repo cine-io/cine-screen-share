@@ -62,8 +62,8 @@
             <div class="control-group">
               <div class="controls">
                 <button  class="col-md-3 btn btn-success start-btn">Start</button>
-                <!-- <button class="col-md-3 col-md-offset-1 btn btn-danger cancel-btn">Cancel</button> -->
-                <button class="col-md-3 col-md-offset-1 btn btn-danger stop-btn">Stop</button>
+                <button class="col-md-3 col-md-offset-1 btn btn-danger stop-btn">Stop</button><br/>
+                <button class="hidden col-md-7 btn btn-primary install-btn">Install Chrome Extension</button>
               </div>
             </div>
           </form>
@@ -159,9 +159,18 @@
         }
       }
 
+      function installChromeExtension(event) {
+        chrome.webstore.install()
+      }
+
       window.addEventListener("message", receiveMessage, false) // Chrome only
       $('.start-btn').on('click', startScreenShare)
       $('.stop-btn').on('click', stopScreenShare)
+      $('.install-btn').on('click', installChromeExtension)
+
+      if (navigator.webkitGetUserMedia) {
+        $('.install-btn').removeClass('hidden')
+      }
 
     })
 
