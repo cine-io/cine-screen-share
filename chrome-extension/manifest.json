@@ -1,7 +1,7 @@
 {
    "name": "cine.io Screen Sharing",
    "description": "Share your screen with cine.io",
-   "version": "0.2.0",
+   "version": "0.2.1",
    "icons": {
       "16": "cine-icon-16x16.png",
       "64": "cine-icon-64x64.png"
