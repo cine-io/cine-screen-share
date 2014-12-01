@@ -14,9 +14,17 @@ function receiveMessage(event) {
   }
 }
 
+function notifyHasExtension() {
+  window.postMessage({name: "cineScreenShareHasExtension"}, "*");
+  var hasExtensionNode = document.createElement('div')
+  hasExtensionNode.id = 'cine-screenshare-has-extension'
+  hasExtensionNode.style.display = 'none'
+  document.body.appendChild(hasExtensionNode)
+}
+
 function main() {
   window.addEventListener("message", receiveMessage, false);
-  window.postMessage({name: "cineScreenHasExtension"}, "*");
+  notifyHasExtension()
 }
 
 main()

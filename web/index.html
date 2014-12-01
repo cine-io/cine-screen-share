@@ -13,7 +13,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Play:400,700|Oswald:300|Raleway:100,300" media="screen" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="https://www.cine.io/images/cine-icon.png" />
-    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ancoeogeclfnhienkmfmeeomadmofhmi">
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/cineio-screen-sharing/ancoeogeclfnhienkmfmeeomadmofhmi">
 
     <style type="text/css">
     input, video {
@@ -68,7 +68,7 @@
                 <button  class="col-md-3 btn btn-success start-btn">Start</button>
                 <button class="col-md-3 col-md-offset-1 btn btn-danger stop-btn">Stop</button><br/>
                 <button class="hidden col-md-7 btn btn-primary install-btn">Install Chrome Extension</button>
-                <div class="configure-firefox col-md-12">
+                <div class="configure-firefox hidden col-md-12">
                   <p>To configure Firefox:</p>
                   <ol>
                     <li>Ensure that the <code>media.getusermedia.screensharing.enabled</code> setting is <code>true</code>.</li>
@@ -134,8 +134,8 @@
 
       function receiveMessage(event) {
         switch (event.data.name) {
-        case "cineScreenHasExtension":
-          console.log("cine.io screen share extension loaded.")
+        case "cineScreenShareHasExtension":
+          console.log("cine.io screen share extension is installed.")
           break
         case "cineScreenShareResponse":
           onScreenShareResponse(event.data.id)
@@ -181,6 +181,7 @@
       $('.install-btn').on('click', installChromeExtension)
 
       if (navigator.webkitGetUserMedia) {
+        console.log("extension installed:", chrome.app.isInstalled)
         $('.install-btn').removeClass('hidden')
       } else if (navigator.mozGetUserMedia) {
         $('.configure-firefox').removeClass('hidden')
