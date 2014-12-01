@@ -3,8 +3,8 @@ var https = require('https')
   , express = require('express')
   , connect = require('connect')
   , options = {
-      key: fs.readFileSync('key.pem')
-    , cert: fs.readFileSync('cert.pem')
+      key: fs.readFileSync(__dirname + '/key.pem')
+    , cert: fs.readFileSync(__dirname + '/cert.pem')
     , requestCert: true
     , rejectUnauthorized: false
     , agent: false
