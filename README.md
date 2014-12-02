@@ -13,7 +13,7 @@ $ npm install
 $ node server.js
 ```
 
-Then, browse to https://localhost.cine.io:9090
+Then, browse to http://localhost.cine.io:9090 or https://localhost.cine.io:9443
 
 ## Getting Started on Chrome
 
